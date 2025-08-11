@@ -1,0 +1,77 @@
+{
+	"info": {
+		"_postman_id": "b8f27e87-d983-4f1e-a4ed-19f2d2507833",
+		"name": "Kumparan Test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "16088351"
+	},
+	"item": [
+		{
+			"name": "New Article",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"author_id\":\"019894fd-8933-748f-acbb-f4e087216aa2\",\n    \"title\":\"Testing1\",\n    \"body\":\"Abclimadasar\"\n\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/article",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"article"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Article",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/article?author=019894fd-8933-748f-acbb-f4e087216aa2&query=Testing",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"article"
+					],
+					"query": [
+						{
+							"key": "author",
+							"value": "019894fd-8933-748f-acbb-f4e087216aa2"
+						},
+						{
+							"key": "query",
+							"value": "Testing"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
