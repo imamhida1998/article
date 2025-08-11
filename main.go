@@ -24,7 +24,7 @@ func main() {
 	ArticleRepo := repository.NewArticleRepository(db)
 	ArtiUsecase := usecase.NewArticleUsecase(ArticleRepo)
 	ArticleController := controller.NewArticleController(ArtiUsecase)
-
+	route.Use(gin.Recovery())
 	route.POST("/article", ArticleController.CreateArticle)
 	route.GET("/article", ArticleController.GetArticle)
 

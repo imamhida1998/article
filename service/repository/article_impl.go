@@ -6,6 +6,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"time"
 )
 
 type articleRepository struct {
@@ -16,11 +17,12 @@ func NewArticleRepository(db *sql.DB) ArticleRepository {
 	return &articleRepository{db}
 }
 
-func (repo *articleRepository) CreateArticle(ctx context.Context, params model.Article) error {
-	query := `INSERT INTO articles (author_id, title, body, created_at) 
-							VALUES ($1, $2, $3, $4) `
+func (repo *articleRepository) CreateArticle(params model.Article, ctx context.Context) error {
+	query := `INSERT INTO articles (id,author_id, title, body) 
+							VALUES ($1, $2, $3,$4 ) `
 
-	if _, err := repo.db.ExecContext(ctx, query, params.AuthorId, params.Title, params.Body, params.CreatedAt); err != nil {
+	_, err := repo.db.Exec(query, params.Id, params.AuthorId, params.Title, params.Body)
+	if err != nil {
 		return err
 	}
 
@@ -32,8 +34,11 @@ func (repo *articleRepository) GetArticle(ctx context.Context, params request.Ge
 	var args []interface{}
 	argIndex := 1
 
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	defer cancel()
+
 	sqlBuilder := `
-            SELECT id, title, body, author, created_at
+            SELECT id, title, body, author_id, created_at
             FROM articles
             WHERE 1=1
         `
@@ -44,14 +49,14 @@ func (repo *articleRepository) GetArticle(ctx context.Context, params request.Ge
 	}
 
 	if params.Author != "" {
-		sqlBuilder += fmt.Sprintf(" AND author ILIKE $%d", argIndex)
+		sqlBuilder += fmt.Sprintf(" AND author_id ILIKE $%d", argIndex)
 		args = append(args, "%"+params.Author+"%")
 		argIndex++
 	}
 
 	sqlBuilder += " ORDER BY created_at DESC"
 
-	rows, err := repo.db.Query(sqlBuilder, args...)
+	rows, err := repo.db.QueryContext(ctx, sqlBuilder, args...)
 	if err != nil {
 
 		return nil, fmt.Errorf("failed to execute query: %w", err)

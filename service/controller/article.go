@@ -25,7 +25,7 @@ func (article *article) CreateArticle(ctx *gin.Context) {
 		return
 	}
 
-	if err := article.Usecase.CreateArticle(ctx, params); err != nil {
+	if err := article.Usecase.CreateArticle(params, nil); err != nil {
 		ctx.JSON(400, gin.H{"error": err.Error()})
 		return
 

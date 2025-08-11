@@ -7,6 +7,6 @@ import (
 )
 
 type ArticleUsecase interface {
-	CreateArticle(ctx context.Context, params model.Article) error
+	CreateArticle(params model.Article, ctx context.Context) error
 	GetArticle(ctx context.Context, params request.GetListArticle) ([]model.Article, error)
 }
